@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LISANGA-TECH</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Figtree:wght@400;500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#f4faee;--card:#fff;--ink:#0f2a1a;--mute:#56705c;--line:#d9e8cf;--brand:#8ddb5f;--leaf:#4fb332;--deep:#0f2a1a;--soft:#e6f5da;--sun:#f2c53d;--warn:#a85d00;--ok:#1f7a3a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1a10;--card:#12281a;--ink:#e6f4dc;--mute:#9db89f;--line:#22402a;--leaf:#8ddb5f;--deep:#061209;--soft:#183823;--warn:#f2c53d;--ok:#8ddb5f}}
+:root[data-theme="dark"]{--bg:#0a1a10;--card:#12281a;--ink:#e6f4dc;--mute:#9db89f;--line:#22402a;--leaf:#8ddb5f;--deep:#061209;--soft:#183823;--warn:#f2c53d;--ok:#8ddb5f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif}
+h1,h2{font-family:Unbounded,Figtree,system-ui,sans-serif;margin:0;line-height:1.15;letter-spacing:-.01em}
+h2{font-size:1.2rem}h3{font-size:1.05rem;margin:0;line-height:1.25}
+.hero{position:relative;overflow:hidden;background:var(--deep);color:#fff;border-radius:0 0 32px 32px;padding:16px 16px 28px}
+.in{position:relative;z-index:1;max-width:960px;margin:auto}
+.who{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem;color:#cfe6c4;margin:0;font-weight:500}
+.who select{width:auto;background:#183823;color:#fff;border:1px solid #3d6b45;padding:6px 12px;border-radius:999px}
+.hero h1{font-weight:800;font-size:clamp(1.5rem,7.2vw,3.2rem);color:var(--brand);margin:26px 0 0}
+.slogan{font:600 1.05rem/1.35 Unbounded,Figtree,system-ui,sans-serif;color:#fff;max-width:18em;margin:12px 0 0}
+.lead{max-width:15em;color:#cfe6c4;margin:10px 0 20px;font-size:1.05rem}
+.cta{display:flex;flex-direction:column;align-items:flex-start;gap:8px}.cta .btn{margin:0}
+.leaf{position:absolute;right:-10px;top:64px;width:min(31vw,170px);transform-origin:8% 96%;animation:grow 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scale(.5) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.leaf{animation:none}}
+select,input,textarea,button{font:inherit;color:inherit}
+select,input,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card)}
+nav{max-width:960px;margin:16px auto 0;display:flex;gap:8px;overflow-x:auto;padding:0 16px}
+nav button{white-space:nowrap;border:1.5px solid var(--line);background:var(--card);padding:9px 16px;border-radius:999px;cursor:pointer;font-weight:600}
+nav button[aria-current="true"]{background:var(--brand);border-color:var(--brand);color:var(--deep)}
+main{max-width:960px;margin:auto;padding:16px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.card h3{margin-bottom:6px}
+.oc{border-left:7px solid var(--line)}.st-Reçue{border-left-color:var(--sun)}.st-Planifiée{border-left-color:#6fb1e6}.st-En_cours{border-left-color:var(--leaf)}.st-Terminée{border-left-color:var(--ok)}
+.prog{display:flex;gap:4px;margin:10px 0}.prog i{flex:1;height:6px;border-radius:3px;background:var(--line)}.prog i.on{background:var(--leaf)}
+.mute{color:var(--mute);font-size:.92rem}
+label{display:block;font-weight:600;margin:10px 0 4px}
+.btn{background:var(--brand);color:var(--deep);border:0;padding:12px 20px;border-radius:999px;font-weight:700;cursor:pointer;margin-top:12px;transition:transform .12s}
+.btn:active{transform:scale(.97)}
+.btn.alt{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid var(--brand)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.tag{display:inline-block;padding:2px 12px;border-radius:999px;background:var(--soft);font-size:.82rem;font-weight:700}
+.s-Reçue{color:var(--warn)}.s-Terminée{color:var(--ok)}.s-Annulée{color:var(--mute)}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:16px}
+.stat b{display:block;font:800 2rem Unbounded,sans-serif;color:var(--leaf)}
+.video{aspect-ratio:16/9;background:var(--deep);border-radius:14px;display:grid;place-items:center;color:var(--brand);margin:10px 0;font-weight:700}
+.q{margin:12px 0}.q label{font-weight:500;margin:4px 0;display:flex;gap:8px;align-items:center}.q input{width:auto}
+.empty{padding:24px;text-align:center;border:1.5px dashed var(--line);border-radius:18px;color:var(--mute)}
+footer{background:var(--deep);color:#cfe6c4;border-radius:32px 32px 0 0;margin-top:32px;padding:24px 16px;font-size:.92rem}
+footer .in{display:grid;gap:4px}footer b{color:var(--brand);font:800 1.05rem Unbounded,sans-serif}footer a{color:#fff}
+</style>
+</head>
+<body>
+<header class="hero"><div class="in"><p class="who" id="who"></p>
+<h1>LISANGA-TECH</h1><p class="slogan">Ensemble, formons la jeunesse qui invente l’avenir.</p><p class="lead">Votre matériel informatique en bonne santé, votre équipe formée.</p>
+<div class="cta"><button class="btn" data-go="commandes">Demander une maintenance</button><button class="btn ghost" data-go="formations">Découvrir les formations</button></div></div>
+<svg class="leaf" viewBox="0 0 200 200" aria-hidden="true"><path d="M120 200C108 150 138 108 200 92C206 150 172 196 120 200Z" fill="#4fb332"/><path d="M10 195C0 90 70 15 190 8C196 120 130 192 10 195Z" fill="#8ddb5f"/><path d="M14 192C70 120 120 70 176 22" stroke="#0f2a1a" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M70 148C96 146 116 128 130 104M44 168C56 136 74 112 98 90" stroke="#0f2a1a" stroke-width="3" stroke-linecap="round" fill="none" opacity=".5"/></svg></header>
+<section id="svc" class="in" style="padding:16px 16px 0"><h2 style="margin:8px 0 12px">Nos services</h2><div class="grid"><div class="card"><h3>Réparation et maintenance</h3><p class="mute">Diagnostic, réparation et entretien de vos ordinateurs.</p></div><div class="card"><h3>Réseau et Wi-Fi</h3><p class="mute">Installation et dépannage de votre réseau local.</p></div><div class="card"><h3>Kits Starlink</h3><p class="mute">Vente de kits Starlink, avec installation et mise en service. Prix communiqué après votre demande.</p></div><div class="card"><h3>Wi-Fi longue portée</h3><p class="mute">Couverture Wi-Fi extérieure jusqu’à 1 km.</p></div><div class="card"><h3>Vidéosurveillance</h3><p class="mute">Caméras IP, installation et configuration.</p></div></div><button class="btn" data-go="commandes">Demander un devis ou une intervention</button></section>
+<nav id="nav" aria-label="Sections"></nav>
+<p id="dbn" hidden role="alert" class="tag s-Reçue" style="margin:12px 16px">Connexion à la base de données impossible : vos changements restent sur cet appareil.</p>
+<main id="main"></main>
+<footer><div class="in"><b>LISANGA-TECH</b><span>Avenue Colonel Ebeya N°65, appt 3D, immeuble MBP, Gombe, Kinshasa</span><span><a href="tel:+243829226360">+243 829 226 360</a> · <a href="mailto:ezechielpelendo@gmail.com">ezechielpelendo@gmail.com</a></span></div></footer>
+<script>
+const techs=()=>S.users.filter(u=>u.role==='tech').map(u=>u.name);
+const STEPS=['Reçue','Planifiée','En cours','Terminée'];
+const SERVICES=['Réparation d’ordinateur','Réseau et Wi-Fi','Installation logicielle','Maintenance préventive','Vidéosurveillance','Vente de kits Starlink','Installation Wi-Fi longue portée (jusqu’à 1 km)'];
+const COURSES=[
+{id:1,t:'Bases de la maintenance informatique',f:'En ligne',d:'Vidéos + quiz, à votre rythme',q:[{q:'Que faire avant toute réparation ?',o:['Formater le disque','Sauvegarder les données','Changer l’écran'],a:1},{q:'Quel outil sert à mesurer une tension ?',o:['Multimètre','Tournevis','Pince à sertir'],a:0}]},
+{id:2,t:'Réseaux locaux et Wi-Fi',f:'Direct (visio)',d:'Session en visioconférence avec le formateur',w:'Sam. 3 oct. 2026, 10h00'},
+{id:3,t:'Dépannage matériel en atelier',f:'Présentiel',d:'Pratique sur machines réelles',w:'Sam. 10 oct. 2026, 9h00 · Avenue Colonel Ebeya N°65, appt 3D, immeuble MBP, Gombe, Kinshasa'}];
+const ROLES={client:['commandes','formations','connexion'],tech:['interventions'],formateur:['formations'],admin:['tableau','commandes','interventions','formations','utilisateurs']};
+const NAMES={commandes:'Commandes',formations:'Formations',interventions:'Interventions',tableau:'Tableau de bord',connexion:'Espace personnel',utilisateurs:'Utilisateurs'};
+let ready=false,tm=null;
+const sb=supabase.createClient('https://preqyaohhjxqkbcmapyy.supabase.co','sb_publishable_WV6IZcwdvzOl4YQFb3W3iw__MROWypn');
+let S={orders:[],enr:[],scores:{},n:1};
+try{const r=localStorage.getItem('lt');if(r)S=JSON.parse(r)}catch(e){}
+const SH=['orders','n','enr','custom','users'];
+const pick=(o=S)=>{const r={};SH.forEach(k=>{if(o[k]!==undefined)r[k]=o[k]});return r};
+const save=()=>{try{localStorage.setItem('lt',JSON.stringify(S))}catch(e){}
+if(!ready)return;
+clearTimeout(tm);tm=setTimeout(async()=>{const{error}=await sb.from('app_state').update({data:pick(),updated_at:new Date().toISOString()}).eq('id',1);const b=document.getElementById('dbn');if(b)b.hidden=!error},400)};
+if(!S.seeded){S.seeded=1;if(!S.orders.length){S.orders=[
+{id:1,name:'Marie Kabongo',svc:'Réseau et Wi-Fi',dev:'Routeur TP-Link',desc:'Le Wi-Fi se coupe plusieurs fois par jour.',urg:false,st:'Planifiée',tech:'Patrick',date:'2026-09-22'},
+{id:2,name:'Cabinet Mbemba',svc:'Réparation d’ordinateur',dev:'3 laptops Dell',desc:'Lenteur extrême et écrans bleus.',urg:true,st:'En cours',tech:'Grâce',date:'2026-09-23'},
+{id:3,name:'Jean Tshimanga',svc:'Vidéosurveillance',dev:'4 caméras IP',desc:'Installation et configuration à distance.',urg:false,st:'Reçue',tech:'',date:'2026-09-24'}];S.n=4}save()}
+S.custom=S.custom||[];S.enr=(S.enr||[]).map(x=>typeof x==='number'?{c:x,name:'Participant'}:x);
+if(!S.seed2){S.seed2=1;S.enr.push({c:2,name:'Marie Kabongo'},{c:3,name:'Jean Tshimanga'});save()}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let me=null,role='client',view='commandes',open=null,flt='',note='',err='',unote='',cfm=null;S.users=S.users||[];
+try{const u=sessionStorage.getItem('ltu');me=S.users.find(x=>x.u===u)||null;if(me)role=me.role}catch(e){}
+const $=id=>document.getElementById(id);
+
+function nav(){const v=ROLES[role];if(!v.includes(view))view=v[0];
+$('nav').innerHTML=v.map(k=>`<button data-v="${k}" aria-current="${k===view}">${NAMES[k]}</button>`).join('');
+$('nav').onclick=e=>{const b=e.target.closest('button');if(b){view=b.dataset.v;open=null;draw()}}}
+
+function orderCard(o,tech){const nx=STEPS[STEPS.indexOf(o.st)+1],open_=o.st!=='Terminée'&&o.st!=='Annulée';return `<div class="card oc st-${o.st.replace(/ /g,'_')}"><div class="row"><h3>#${o.id} ${esc(o.svc)}</h3><span class="tag s-${o.st}">${o.st}</span></div>
+${o.st==='Annulée'?'':`<div class="prog" role="img" aria-label="Étape ${STEPS.indexOf(o.st)+1} sur 4">${STEPS.map((_,i)=>`<i class="${i<=STEPS.indexOf(o.st)?'on':''}"></i>`).join('')}</div>`}<p class="mute">${esc(o.name)} · ${esc(o.dev)} · ${o.date}${o.urg?' · Urgent':''}</p><p>${esc(o.desc)}</p>
+<p class="mute">Technicien : ${o.tech?esc(o.tech):'à assigner'}</p>
+${tech&&open_?`<label>Assigner à<select data-assign="${o.id}"><option value="">Non assigné</option>${techs().map(t=>`<option${t===o.tech?' selected':''}>${t}</option>`).join('')}</select></label><button class="btn alt" data-adv="${o.id}">Passer à « ${nx} »</button>`:''}
+${!tech&&o.st==='Reçue'?`<button class="btn alt" data-cancel="${o.id}">Annuler la demande</button>`:''}</div>`}
+const filt=l=>flt?l.filter(o=>o.st===flt):l;
+const fbar=()=>`<label for="flt">Filtrer par statut</label><select id="flt" style="max-width:240px;margin-bottom:12px"><option value="">Tous</option>${[...STEPS,'Annulée'].map(t=>`<option${t===flt?' selected':''}>${t}</option>`).join('')}</select>`;
+
+function vCommandes(){return `<div class="grid"><form class="card" id="f"><h2>Nouvelle demande</h2>
+<label for="n">Votre nom</label><input id="n" required>
+<label for="s">Service</label><select id="s">${SERVICES.map(s=>`<option>${s}</option>`).join('')}</select>
+<label for="d">Appareil ou équipement</label><input id="d" required placeholder="Ex. Laptop HP, routeur">
+<label for="m">Votre besoin ou problème constaté</label><textarea id="m" rows="3" required></textarea>
+<label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type="checkbox" id="u" style="width:auto">Demande urgente</label>
+<button class="btn">Envoyer la demande</button></form>
+<div><h2 style="margin-bottom:10px">Suivi des commandes</h2>${fbar()}${S.orders.length?filt(S.orders).slice().reverse().map(o=>orderCard(o,false)).join(''):'<div class="empty">Aucune commande pour le moment. Remplissez le formulaire pour envoyer votre première demande.</div>'}</div></div>`}
+
+function vInterventions(){return `<h2 style="margin-bottom:10px">Interventions</h2>${fbar()}${S.orders.length?`<div class="grid">${filt(S.orders).map(o=>orderCard(o,true)).join('')}</div>`:'<div class="empty">Aucune intervention à traiter.</div>'}`}
+
+const allC=()=>[...COURSES,...S.custom];
+function vFormations(){if(open){const c=allC().find(x=>x.id===open),sc=S.scores[c.id];
+return `<button class="btn alt" id="back">Retour aux formations</button><div class="card" style="margin-top:12px"><h2>${c.t}</h2><div class="video">Vidéo de la leçon</div>
+<form id="qz">${c.q.map((q,i)=>`<fieldset class="q" style="border:0;padding:0"><legend><b>${q.q}</b></legend>${q.o.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}" required>${o}</label>`).join('')}</fieldset>`).join('')}
+<button class="btn">Valider le quiz</button></form>${sc!=null?`<p><b>Dernier score : ${sc}/${c.q.length}</b></p>`:''}</div>`}
+const staff=role==='formateur'||role==='admin',n=note;note='';
+const nf=`<form class="card" id="nc" style="margin-bottom:14px"><h3>Nouvelle formation</h3>
+<label for="ct">Titre</label><input id="ct" required>
+<label for="cf">Format</label><select id="cf"><option>En ligne</option><option>Direct (visio)</option><option>Présentiel</option></select>
+<label for="cd">Description</label><input id="cd" required>
+<label for="cw">Date et lieu</label><input id="cw" placeholder="Ex. Sam. 17 oct. 2026, 9h · Avenue Colonel Ebeya N°65, appt 3D, immeuble MBP, Gombe, Kinshasa">
+<button class="btn">Publier la formation</button></form>`;
+return `<h2 style="margin-bottom:10px">Formations</h2>${n?`<p role="status" class="tag" style="margin-bottom:12px">${esc(n)}</p>`:''}${staff?nf:''}<div class="grid">${allC().map(c=>{const list=S.enr.filter(x=>x.c===c.id);
+return `<div class="card" style="border-top:6px solid ${({'En ligne':'var(--leaf)','Direct (visio)':'var(--sun)','Présentiel':'var(--ink)'})[c.f]||'var(--leaf)'}"><span class="tag">${c.f}</span><h3 style="margin-top:8px">${esc(c.t)}</h3><p class="mute">${esc(c.d)}</p>${c.w?`<p>${esc(c.w)}</p>`:''}
+${c.q?`<button class="btn" data-open="${c.id}">Suivre la formation</button>`:`<form data-enrf="${c.id}"><label for="e${c.id}">Votre nom</label><input id="e${c.id}" required><button class="btn">S’inscrire</button></form>`}
+${staff?`<p class="mute" style="margin-top:12px"><b>${list.length} inscrit(s)</b>${list.length?' : '+list.map(x=>esc(x.name)).join(', '):''}</p>${c.mine?`<button class="btn alt" data-delc="${c.id}">Supprimer la formation</button>`:''}`:''}</div>`}).join('')}</div>`}
+const csv=r=>'\uFEFF'+r.map(l=>l.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(';')).join('\r\n');
+function exp(k){const st=$('st');
+const cf=id=>allC().find(c=>c.id===id)||{};
+const rows=k==='orders'?[['N°','Date','Client','Service','Appareil','Description','Urgent','Statut','Technicien'],...S.orders.map(o=>[o.id,o.date,o.name,o.svc,o.dev,o.desc,o.urg?'Oui':'Non',o.st,o.tech||''])]:[['Formation','Format','Participant'],...S.enr.map(x=>[cf(x.c).t||'',cf(x.c).f||'',x.name])];
+try{const blob=new Blob([csv(rows)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+a.href=url;a.download=k==='orders'?'commandes-lisanga-tech.csv':'inscriptions-lisanga-tech.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);st.textContent='Fichier téléchargé.'}catch(e){st.textContent='L’export a échoué. Réessayez.'}}
+function vTableau(){const c=s=>S.orders.filter(o=>o.st===s).length,urg=S.orders.filter(o=>o.urg&&o.st!=='Terminée'&&o.st!=='Annulée').length;
+const cnt=k=>S.enr.filter(x=>x.c===k.id).length,mx=Math.max(1,...allC().map(cnt));
+return `<h2 style="margin-bottom:10px">Tableau de bord</h2><div class="stats">${STEPS.map(s=>`<div class="card stat"><b>${c(s)}</b>${s}</div>`).join('')}<div class="card stat"><b>${urg}</b>Urgentes en cours</div><div class="card stat"><b>${S.enr.length}</b>Inscriptions</div></div>
+<div class="grid"><div class="card"><h3>Inscriptions par formation</h3>${allC().map(k=>`<p style="margin:10px 0 4px">${esc(k.t)} : <b>${cnt(k)}</b></p><div style="background:var(--soft);border-radius:6px;height:8px"><div style="background:var(--brand);height:8px;border-radius:6px;width:${cnt(k)/mx*100}%"></div></div>`).join('')}</div>
+<div class="card"><h3>Exporter les données</h3><p class="mute">Fichiers CSV, lisibles dans Excel.</p><button class="btn" data-exp="orders">Exporter les commandes</button> <button class="btn alt" data-exp="enr">Exporter les inscriptions</button><p id="st" role="status" class="mute"></p></div></div>`}
+
+const RL={client:'Client',tech:'Technicien',formateur:'Formateur',admin:'Administrateur'};
+const hx=async(s,p)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s+':'+p)))].map(x=>x.toString(16).padStart(2,'0')).join('');
+async function mk(name,u,r,p){u=u.trim().toLowerCase();if(!/^[a-z0-9._-]+$/.test(u))return 'Nom d’utilisateur : lettres, chiffres, point, tiret ou underscore, sans espace.';if(p.length<6)return 'Le mot de passe doit contenir au moins 6 caractères.';if(S.users.some(x=>x.u===u))return 'Ce nom d’utilisateur existe déjà.';const salt=crypto.randomUUID();S.users.push({u,name:name.trim(),role:r,salt,h:await hx(salt,p)});save();return ''}
+function enter(u){me=u;role=u.role;view=ROLES[role][0];try{sessionStorage.setItem('ltu',u.u)}catch(e){}}
+const alertP=e=>e?`<p role="alert" class="tag s-Reçue" style="margin:12px 0">${esc(e)}</p>`:'';
+function vConnexion(){const e=err;err='';const first=!S.users.some(x=>x.role==='admin');
+return first?`<form class="card" id="sf" style="max-width:420px"><h2>Première configuration</h2><p class="mute">Créez le compte administrateur. Il pourra ensuite créer les comptes des techniciens et des formateurs.</p>
+<label for="sn">Nom complet</label><input id="sn" required><label for="su">Nom d’utilisateur</label><input id="su" required autocomplete="username"><label for="sp">Mot de passe (6 caractères minimum)</label><input id="sp" type="password" required minlength="6" autocomplete="new-password"><button class="btn">Créer le compte administrateur</button>${alertP(e)}</form>`
+:`<form class="card" id="lf" style="max-width:420px"><h2>Connexion du personnel</h2><p class="mute">Techniciens, formateurs et administrateur. Votre compte est créé par l’administrateur.</p>
+<label for="lu">Nom d’utilisateur</label><input id="lu" required autocomplete="username"><label for="lp">Mot de passe</label><input id="lp" type="password" required autocomplete="current-password"><button class="btn">Se connecter</button>${alertP(e)}</form>`}
+function vUtilisateurs(){const n=unote,e=err;unote='';err='';
+return `<h2 style="margin-bottom:10px">Utilisateurs</h2>${n?`<p role="status" class="tag" style="margin-bottom:12px">${esc(n)}</p>`:''}${alertP(e)}
+<form class="card" id="uf" style="margin-bottom:14px"><h3>Créer un compte</h3><label for="un">Nom complet</label><input id="un" required><label for="ur">Rôle</label><select id="ur"><option value="tech">Technicien</option><option value="formateur">Formateur</option></select><label for="uu">Nom d’utilisateur</label><input id="uu" required autocomplete="off"><label for="up">Mot de passe (6 caractères minimum)</label><input id="up" required minlength="6" autocomplete="off"><button class="btn">Créer le compte</button></form>
+<div class="grid">${S.users.map(x=>`<div class="card"><div class="row"><h3>${esc(x.name)}</h3><span class="tag">${RL[x.role]}</span></div><p class="mute">Utilisateur : ${esc(x.u)}</p><form data-rst="${esc(x.u)}"><label for="r_${esc(x.u)}">Nouveau mot de passe</label><input id="r_${esc(x.u)}" required minlength="6" autocomplete="off"><button class="btn alt">Changer le mot de passe</button></form>${x.role!=='admin'?`<button class="btn alt" data-delu="${esc(x.u)}">${cfm===x.u?'Confirmer la suppression':'Supprimer le compte'}</button>`:''}</div>`).join('')}</div>`}
+function draw(){nav();const V={commandes:vCommandes,interventions:vInterventions,formations:vFormations,tableau:vTableau,connexion:vConnexion,utilisateurs:vUtilisateurs};
+$('who').innerHTML=me?`Connecté : <b>${esc(me.name)}</b> · ${RL[me.role]} <button class="btn ghost" id="out" style="margin:0 0 0 6px;padding:5px 14px">Déconnexion</button>`:'Espace client';
+document.querySelector('.cta').style.display=me?'none':'';$('svc').style.display=me?'none':'';$('main').innerHTML=V[view]()}
+
+document.addEventListener('submit',async e=>{const f=e.target,i=f.id;err='';
+try{
+if(i==='sf'){err=await mk($('sn').value,$('su').value,'admin',$('sp').value);if(!err)enter(S.users[S.users.length-1]);draw()}
+if(i==='uf'){err=await mk($('un').value,$('uu').value,$('ur').value,$('up').value);if(!err)unote='Compte créé. Transmettez à la personne son nom d’utilisateur et son mot de passe.';draw()}
+if(i==='lf'){const u=S.users.find(x=>x.u===$('lu').value.trim().toLowerCase());if(u&&u.h===await hx(u.salt,$('lp').value))enter(u);else err='Nom d’utilisateur ou mot de passe incorrect.';draw()}
+if(f.dataset.rst){const u=S.users.find(x=>x.u===f.dataset.rst),p=f.querySelector('input').value;if(p.length<6)err='Le mot de passe doit contenir au moins 6 caractères.';else{u.salt=crypto.randomUUID();u.h=await hx(u.salt,p);save();unote='Mot de passe modifié pour '+u.name+'.'}draw()}
+}catch(x){err='Erreur technique. Réessayez.';draw()}});
+document.addEventListener('submit',e=>{e.preventDefault();
+if(e.target.id==='nc'){S.custom.push({id:Date.now(),t:$('ct').value,f:$('cf').value,d:$('cd').value,w:$('cw').value,mine:1});note='Formation publiée.';save();draw()}
+if(e.target.dataset.enrf){const id=+e.target.dataset.enrf,nm=e.target.querySelector('input').value.trim();if(nm){if(!S.enr.some(x=>x.c===id&&x.name.toLowerCase()===nm.toLowerCase()))S.enr.push({c:id,name:nm});note='Inscription confirmée pour '+nm+'.';save();draw()}}
+if(e.target.id==='f'){S.orders.push({id:S.n++,name:$('n').value,svc:$('s').value,dev:$('d').value,desc:$('m').value,urg:$('u').checked,st:'Reçue',tech:'',date:new Date().toISOString().slice(0,10)});save();draw()}
+if(e.target.id==='qz'){const c=COURSES.find(x=>x.id===open);let s=0;c.q.forEach((q,i)=>{if(+e.target['q'+i].value===q.a)s++});S.scores[c.id]=s;save();draw()}});
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.adv){const o=S.orders.find(x=>x.id==b.dataset.adv);o.st=STEPS[STEPS.indexOf(o.st)+1];save();draw()}
+if(b.dataset.cancel){S.orders.find(x=>x.id==b.dataset.cancel).st='Annulée';save();draw()}
+if(b.dataset.go){view=b.dataset.go;open=null;draw();window.scrollTo({top:document.querySelector('nav').offsetTop-8,behavior:'smooth'})}
+if(b.dataset.exp)exp(b.dataset.exp);
+if(b.id==='out'){me=null;role='client';view='commandes';open=null;try{sessionStorage.removeItem('ltu')}catch(x){}draw()}
+if(b.dataset.delu){const u=b.dataset.delu;if(cfm===u){S.users=S.users.filter(x=>x.u!==u);cfm=null;save();unote='Compte supprimé.'}else cfm=u;draw()}
+if(b.dataset.delc){const id=+b.dataset.delc;S.custom=S.custom.filter(c=>c.id!==id);S.enr=S.enr.filter(x=>x.c!==id);save();draw()}
+if(b.dataset.open){open=+b.dataset.open;draw()}
+if(b.id==='back'){open=null;draw()}});
+document.addEventListener('change',e=>{const t=e.target;
+if(t.dataset.assign){S.orders.find(x=>x.id==t.dataset.assign).tech=t.value;save();draw()}
+if(t.id==='flt'){flt=t.value;draw()}});
+draw();
+function later(){const a=document.activeElement;if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)&&$('main').contains(a)){setTimeout(later,3000);return}
+if(me){const u=S.users.find(x=>x.u===me.u);me=u||null;role=me?me.role:'client';if(!me)view='commandes'}draw()}
+(async()=>{try{
+const{data,error}=await sb.from('app_state').select('data').eq('id',1).single();
+if(!error&&data&&data.data&&Object.keys(data.data).length){
+SH.forEach(k=>{if(data.data[k]!==undefined)S[k]=JSON.parse(JSON.stringify(data.data[k]))});
+try{localStorage.setItem('lt',JSON.stringify(S))}catch(e){}
+}else if(!error){await sb.from('app_state').update({data:pick()}).eq('id',1)}
+ready=true;later();
+sb.channel('app_state_sync').on('postgres_changes',{event:'UPDATE',schema:'public',table:'app_state',filter:'id=eq.1'},p=>{
+const d=(p.new&&p.new.data)||{};
+if(JSON.stringify(pick(d))===JSON.stringify(pick()))return;
+SH.forEach(k=>{if(d[k]!==undefined)S[k]=JSON.parse(JSON.stringify(d[k]))});
+try{localStorage.setItem('lt',JSON.stringify(S))}catch(e){}
+later()}).subscribe();
+}catch(e){const b=document.getElementById('dbn');if(b)b.hidden=false}})();
+</script>
+</body>
+</html>
